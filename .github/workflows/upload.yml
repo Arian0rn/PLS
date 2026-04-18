@@ -3,6 +3,9 @@ name: Upload 1GB File
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   upload:
     runs-on: ubuntu-latest
@@ -10,21 +13,23 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Git LFS
         run: |
           git lfs install
 
-      - name: Download file from Google Drive
+      - name: Download file
         run: |
           curl -L -o file.bin "https://drive.usercontent.google.com/download?id=194vwHB6H8Qf2BE1ZyBdNrr335HImvFc0&export=download&confirm=t"
 
-      - name: Track file with LFS
+      - name: Track LFS
         run: |
           git lfs track "file.bin"
           git add .gitattributes
 
-      - name: Commit changes
+      - name: Commit
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
@@ -32,6 +37,6 @@ jobs:
           git add file.bin
           git commit -m "upload large file" || echo "no changes"
 
-      - name: Push to GitHub
+      - name: Push
         run: |
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.ref_name }}
+          git push origin HEAD:${{ github.ref_name }}
