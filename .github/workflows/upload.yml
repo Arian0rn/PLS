@@ -1,4 +1,4 @@
-name: Upload Large Video from Drive
+name: Debug Drive Download
 
 on:
   workflow_dispatch:
@@ -11,39 +11,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Setup Python (for gdown)
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install downloader
+      - name: Install gdown
         run: |
           pip install gdown
 
-      - name: Download file from Google Drive
+      - name: Download
         run: |
-          gdown 194vwHB6H8Qf2BE1ZyBdNrr335HImvFc0 -O video.mp4
+          gdown --fuzzy 194vwHB6H8Qf2BE1ZyBdNrr335HImvFc0 -O video.mp4
 
-      - name: Verify download
+      - name: Verify
         run: |
-          ls -lh video.mp4
-          file video.mp4
-
-      - name: Setup Git
-        run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-
-      - name: Commit file
-        run: |
-          git add video.mp4
-          git commit -m "add large video" || echo "no changes"
-
-      - name: Push to GitHub
-        run: |
-          git push origin HEAD:${{ github.ref_name }}
+          ls -lh
+          file video.mp4 || true
