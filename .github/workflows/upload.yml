@@ -31,4 +31,4 @@ jobs:
 
           git add file.bin
           git commit -m "upload large file" || echo "no changes"
-          git push
+          git push origin HEAD
