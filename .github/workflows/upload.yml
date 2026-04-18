@@ -9,13 +9,13 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Git LFS
         run: |
           git lfs install
 
-      - name: Download file
+      - name: Download file from Google Drive
         run: |
           curl -L -o file.bin "https://drive.usercontent.google.com/download?id=194vwHB6H8Qf2BE1ZyBdNrr335HImvFc0&export=download&confirm=t"
 
@@ -24,11 +24,14 @@ jobs:
           git lfs track "file.bin"
           git add .gitattributes
 
-      - name: Commit & Push
+      - name: Commit changes
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
 
           git add file.bin
           git commit -m "upload large file" || echo "no changes"
-          git push origin HEAD
+
+      - name: Push to GitHub
+        run: |
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.ref_name }}
