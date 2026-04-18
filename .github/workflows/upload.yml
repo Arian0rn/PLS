@@ -15,14 +15,9 @@ jobs:
         run: |
           git lfs install
 
-      - name: Download file from Google Drive
+      - name: Download file
         run: |
-          FILE_ID="PUT_YOUR_FILE_ID_HERE"
-
-          curl -c cookies.txt -s -L "https://drive.google.com/uc?export=download&id=${FILE_ID}" > /dev/null
-          CONFIRM=$(awk '/download/ {print $NF}' cookies.txt)
-
-          curl -L -b cookies.txt "https://drive.google.com/uc?export=download&confirm=${CONFIRM}&id=${FILE_ID}" -o file.bin
+          curl -L -o file.bin "https://drive.usercontent.google.com/download?id=194vwHB6H8Qf2BE1ZyBdNrr335HImvFc0&export=download&confirm=t"
 
       - name: Track file with LFS
         run: |
