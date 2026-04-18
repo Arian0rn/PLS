@@ -1,4 +1,4 @@
-name: Diagnose Drive
+name: FULL DEBUG
 
 on:
   workflow_dispatch:
@@ -10,14 +10,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check python
+        run: |
+          python --version
+          pip --version
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
       - name: Install gdown
         run: |
-          pip install gdown
+          pip install -v gdown
 
-      - name: Test download verbose
+      - name: Run gdown debug
         run: |
-          gdown --verbose --fuzzy 194vwHB6H8Qf2BE1ZyBdNrr335HImvFc0 -O video.mp4
+          gdown --debug 194vwHB6H8Qf2BE1ZyBdNrr335HImvFc0
